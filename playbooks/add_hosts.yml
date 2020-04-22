@@ -3,7 +3,7 @@
   remote_user: root
   hosts: nrpe_host
   tasks:
-  - include_vars: vars/mysecrets.yml
+  - include_vars: ../vars/mysecrets.yml
   - name: Adding Host
     uri:
       url: 'http://192.168.0.30/nagiosxi/api/v1/config/host?apikey={{ apikey }}&pretty=1'

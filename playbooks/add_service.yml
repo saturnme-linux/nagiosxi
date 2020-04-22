@@ -16,7 +16,7 @@
       - { service: 'Ping', command: 'check_ping\!3000,80%\!5000,100%' }
       - { service: 'CPU Stats', command: "check_nrpe!check_cpu_stats!-a '-w 85 -c 95'" }
       - { service: 'Check uptime', command: "check_nrpe!check_uptime" }
-      - { service: 'Cron Scheduling Daemon', command: "check_nrpe!check_init_service!-a 'cron'" }
+      - { service: 'Cron Scheduling Daemon', command: "check_nrpe!check_init_service!-a 'crond'" }
       - { service: 'Nginx service', command: "check_nrpe!check_init_service!-a 'nginx'" }
       - { service: 'Postgresql Service', command: "check_nrpe!check_init_service!-a 'postgresql'" }
       - { service: 'Current Load', command: "check_nrpe!check_load!-a '-w 15,10,5 -c 30,20,10'" }
