@@ -1,0 +1,16 @@
+---
+- name: Playbook to add Linux clients to nagiosXI 
+  remote_user: root
+  hosts: nrpe_host
+  tasks:
+  - include_vars: vars/mysecrets.yml
+  - name: Adding Host
+    uri:
+      url: 'http://192.168.0.30/nagiosxi/api/v1/config/host?apikey={{ apikey }}&pretty=1'
+      method: POST
+      body: 'host_name={{ ansible_hostname }}&address={{ ansible_default_ipv4.address }}&check_command={{ item.command }}&max_check_attempts=2&check_period=24x7&contacts=nagiosadmin&notification_interval=5&notification_period=24x7&applyconfig=1'
+    register: result
+    with_items:
+      - { command: 'check_ping\!3000,80%\!5000,100%' }
+    
+...

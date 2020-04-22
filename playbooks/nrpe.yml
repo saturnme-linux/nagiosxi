@@ -1,0 +1,32 @@
+---
+- name: install nrpe nagios agent
+  remote_user: root
+  hosts: nrpe_host
+  tasks:
+  - name: download the nrpe package
+    get_url:
+      url: "{{ nrpeurl }}"
+      dest: "{{ download_dir }}/{{ nrpesrc }}.tar.gz"
+  - name: unpack the nrpe 
+    unarchive:
+      src: "{{ download_dir }}/{{ nrpesrc }}.tar.gz"
+      dest: "{{ download_dir }}/"
+      remote_src: true
+  - name: Install nrpe agent non interactive
+    command: ./fullinstall -n
+    args:
+      chdir: "{{ download_dir }}/{{ nrpesrc }}"
+   
+  - name: Update the nrpe file to allow nagios server
+    lineinfile:
+      path: /etc/xinetd.d/nrpe
+      regexp: '^(.*)only_from'
+      line: '    only_from       = 127.0.0.1 ::1 192.168.0.30'
+    register: nrpe_file
+    
+  - name: restart the nrpe service
+    service:
+      name: xinetd
+      state: restarted
+    when: nrpe_file.changed
+...
