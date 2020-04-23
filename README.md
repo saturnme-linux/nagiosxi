@@ -14,6 +14,7 @@ ansible-playbook -i inventory/hosts playbooks/add_service.yml  --vault-password-
 Change the variabled inside this file accroding to enviornment.
 playbooks/group_vars/nrpe_host
 ---
+---
 nrpeurl:  https://assets.nagios.com/downloads/nagiosxi/agents/linux-nrpe-agent.tar.gz
 download_dir:  /tmp
 nrpesrc:  linux-nrpe-agent
@@ -24,6 +25,7 @@ PROCESS: xinetd
 This api secret is encrypt using ansible vault
 
 vars/mysecrets.yml
+---
 ---
 apiurl: dsabdksdlsalsadlsadla123213
 ...
