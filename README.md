@@ -12,6 +12,7 @@ ansible-playbook -i inventory/hosts playbooks/add_service.yml  --vault-password-
 
 
 Change the variabled inside this file accroding to enviornment.
+---
 playbooks/group_vars/nrpe_host
 ---
 <p>---</p>
