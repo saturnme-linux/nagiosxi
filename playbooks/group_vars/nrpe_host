@@ -1,0 +1,7 @@
+---
+nrpeurl:  https://assets.nagios.com/downloads/nagiosxi/agents/linux-nrpe-agent.tar.gz
+download_dir:  /tmp
+nrpesrc:  linux-nrpe-agent
+nagiosxi_ip: 192.168.0.130
+PROCESS: xinetd
+...

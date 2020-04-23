@@ -1,0 +1,46 @@
+---
+- name: install nrpe agent on Linux
+  remote_user: root
+  hosts: nrpe_host
+  tasks:
+  - name: check nrpe is installed
+    stat: 
+      path: /etc/xinetd.d/nrpe
+    register: nrpe_check
+
+  - name: Download the nrpe agent
+    get_url:
+      url: "{{ nrpeurl }}"
+      dest: "{{ download_dir }}/{{ nrpesrc }}.tar.gz"
+    when: nrpe_check.stat.exists == false
+ 
+  - name: Unpack NRPE source files
+    unarchive:
+      src: "{{ download_dir }}/{{ nrpesrc }}.tar.gz"
+      dest: "{{ download_dir }}/"
+      remote_src: true 
+    when: nrpe_check.stat.exists == false
+
+  - name: install nrpe agent
+    command: ./fullinstall -n -i {{ nagiosxi_ip }}
+    args:
+      chdir: "{{ download_dir }}/{{ nrpesrc }}"
+    when: nrpe_check.stat.exists == false
+
+  
+  - name: Get running processes
+    shell: "ps -ef | grep -v grep | grep -w {{ PROCESS }} | awk '{print $2}'"
+    register: running_processes
+    when: nrpe_check.stat.exists == false and ansible_os_family == 'Debian'
+
+  - name: Kill running processes
+    shell: "kill {{ item }}"
+    with_items: "{{ running_processes.stdout_lines }}"
+    when: nrpe_check.stat.exists == false and ansible_os_family == 'Debian'
+
+  - name: restart xinetd service
+    service: 
+      name: xinetd
+      state: restarted
+    when: nrpe_check.stat.exists == false and ansible_os_family == 'Debian'
+...
